@@ -8,7 +8,7 @@ function Navbar(){
           <div className='overview-profile'>
             {/* <img src alt="logo"/> */}
             <span>
-              <h1>Water Quality</h1>
+              <h1>Air Quality</h1>
               <p>Description</p>
             </span>
           </div>

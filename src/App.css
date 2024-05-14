@@ -3,7 +3,7 @@
 ------------------------------------*/
 body{
   --gray: #F0F0F0;
-  --blue: #0463CA;
+  --blue: #53bbe0;
   --light-blue: #0487E2;
   --white: #FFFFFF;
   --black: #000000;
@@ -56,7 +56,7 @@ body, html {
   z-index: 10;
   top: 0;
   left: 0;
-  background: linear-gradient(to bottom, rgba(4, 99, 202, .5), rgba(4, 135, 226, .8)), url('./assets/img/water.jpg');
+  background: linear-gradient(to bottom, rgba(168, 232, 255, .5), rgba(192, 240, 255, .8)), url('./assets/img/air.jpg');
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;

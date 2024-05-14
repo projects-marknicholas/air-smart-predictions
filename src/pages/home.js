@@ -17,11 +17,13 @@ function Home(){
 
   useEffect(() => {
     fetchData();
+    const intervalId = setInterval(fetchData, 60000);
+    return () => clearInterval(intervalId);
   }, []);
 
   const fetchData = async () => {
     try {
-      const response = await fetch('https://lspu.edu.ph/e-sentry/api/public/arduino/mikeparam');
+      const response = await fetch('https://air-quality.mchaexpress.com/sensor_data_ordered.php');
       const jsonData = await response.json();
       const latestData = jsonData[0];
       setData([latestData]);
@@ -29,6 +31,22 @@ function Home(){
       console.error('Error fetching data:', error);
     }
   };
+
+  function getAirQualityCategory(AQI) {
+    if (AQI <= 50) {
+      return 'Good';
+    } else if (AQI <= 100) {
+      return 'Moderate';
+    } else if (AQI <= 150) {
+      return 'Unhealthy for Sensitive Groups';
+    } else if (AQI <= 200) {
+      return 'Unhealthy';
+    } else if (AQI <= 300) {
+      return 'Very Unhealthy';
+    } else {
+      return 'Hazardous';
+    }
+  }
 
   return(
     <>
@@ -40,31 +58,49 @@ function Home(){
         <div className='home-flex'>
           <div className='hf-right'>
             <div className='hf-analysis-grid'>
-              <QualityCategoryAnalysis
-                ParameterName="Quality"
-                ParameterData="Poor"
-                Logo={sampleSvg}
-              />
+              {data.map((item, index) => (
+                <QualityCategoryAnalysis
+                  key={index}
+                  ParameterName="Quality"
+                  ParameterData={getAirQualityCategory(item.AQI)}
+                  Logo={sampleSvg}
+                />
+              ))}
               {data.map((item, index) => (
                 <>
                   <QualityScoreAnalysis
-                    parameterData={item.temp}
-                    parameterName="Temperature"
+                    parameterData={item.temperature}
+                    parameterName="Temperature (°C)"
                     Logo={temperatureSvg}
                   />
                   <QualityScoreAnalysis
-                    parameterData={item.ph}
-                    parameterName="pH"
+                    parameterData={item.pressure}
+                    parameterName="Pressure (hPa)"
                     Logo={hydrogenSvg}
                   />
                   <QualityScoreAnalysis
-                    parameterData={item.dosensor}
-                    parameterName="Dissolved Oxygen"
+                    parameterData={item.humidity}
+                    parameterName="Humidity (°C)"
                     Logo={oxygenSvg}
                   />
                   <QualityScoreAnalysis
-                    parameterData={item.tds}
-                    parameterName="Total Dissolved Solids"
+                    parameterData={item.gas}
+                    parameterName="Gas (°C)"
+                    Logo={solidsSvg}
+                  />
+                  <QualityScoreAnalysis
+                    parameterData={item.altitude}
+                    parameterName="Altitude"
+                    Logo={solidsSvg}
+                  />
+                  <QualityScoreAnalysis
+                    parameterData={item.PM2_5}
+                    parameterName="Particular Matter (μg/m3)"
+                    Logo={solidsSvg}
+                  />
+                  <QualityScoreAnalysis
+                    parameterData={item.NC2_5}
+                    parameterName="Number Concentration"
                     Logo={solidsSvg}
                   />
                 </>
